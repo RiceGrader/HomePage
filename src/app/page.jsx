@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { format } from 'date-fns';
+
 export default function Home() {
   const [grainData, setGrainData] = useState([]);
   const [dalData, setDalData] = useState([]);
@@ -22,7 +23,12 @@ export default function Home() {
           throw new Error('Failed to fetch rice data');
         }
         const riceData = await riceResponse.json();
-        setGrainData(riceData.data);
+        
+        // Sort rice data by created_at in descending order (newest first)
+        const sortedRiceData = riceData.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setGrainData(sortedRiceData);
         
         // Fetch dal data
         const dalResponse = await fetch('/api/getdaldata');
@@ -30,7 +36,12 @@ export default function Home() {
           throw new Error('Failed to fetch dal data');
         }
         const dalData = await dalResponse.json();
-        setDalData(dalData.data);
+        
+        // Sort dal data by created_at in descending order (newest first)
+        const sortedDalData = dalData.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setDalData(sortedDalData);
         
         setLoading(false);
       } catch (err) {
@@ -62,7 +73,18 @@ export default function Home() {
 
   const formatDate = (dateString) => {
     try {
-      return format(new Date(dateString), 'yyyy-MM-dd HH:mm:ss');
+      const date = new Date(dateString);
+      const day = date.getDate();
+      const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      
+      return `${day} ${month}, ${year} at ${hours}:${minutes}`;
     } catch {
       return 'N/A';
     }
@@ -133,7 +155,7 @@ export default function Home() {
                 className="border rounded p-2"
               />
             </div>
-            {/* <div className="flex items-end">
+            <div className="flex items-end">
               <button
                 onClick={generatePDF}
                 disabled={generating}
@@ -141,7 +163,7 @@ export default function Home() {
               >
                 {generating ? 'Generating...' : 'Generate PDF Report'}
               </button>
-            </div> */}
+            </div>
           </div>
         </div>
         
@@ -176,14 +198,16 @@ export default function Home() {
             <table className="min-w-full bg-white border border-gray-200">
               <thead>
                 <tr className="bg-gray-100">
+                  <th className="py-2 px-3 border text-left">S. No</th>
                   <th className="py-2 px-3 border text-left">Date and Time</th>
                   <th className="py-2 px-3 border text-left">Device ID</th>
                   <th className="py-2 px-3 border text-left">Get Info</th>
                 </tr>
               </thead>
               <tbody>
-                {grainData.map((data) => (
+                {grainData.map((data, idx) => (
                   <tr key={data._id} className="hover:bg-gray-50">
+                    <td className="py-2 px-3 border">{idx + 1}</td>
                     <td className="py-2 px-3 border">{formatDate(data.created_at)}</td>
                     <td className="py-2 px-3 border">{data.device_id}</td>
                     <td className="py-2 px-3 border">
@@ -203,14 +227,16 @@ export default function Home() {
             <table className="min-w-full bg-white border border-gray-200">
               <thead>
                 <tr className="bg-gray-100">
+                  <th className="py-2 px-3 border text-left">S. No</th>
                   <th className="py-2 px-3 border text-left">Date and Time</th>
                   <th className="py-2 px-3 border text-left">Device ID</th>
                   <th className="py-2 px-3 border text-left">Get Info</th>
                 </tr>
               </thead>
               <tbody>
-                {dalData.map((data) => (
+                {dalData.map((data, idx) => (
                   <tr key={data._id} className="hover:bg-gray-50">
+                    <td className="py-2 px-3 border">{idx + 1}</td>
                     <td className="py-2 px-3 border">{formatDate(data.created_at)}</td>
                     <td className="py-2 px-3 border">{data.device_id}</td>
                     <td className="py-2 px-3 border">
@@ -224,14 +250,6 @@ export default function Home() {
             </table>
           </div>
         )}
-        
-        <div className="fixed top-[-250%] left-[-250%] border ">
-              hello<br/>
-              hello<br/>
-              hello<br/>
-              hello<br/>
-              hello<br/>
-        </div>
       </main>
     </div>
   );
