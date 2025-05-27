@@ -5,6 +5,7 @@ const dal_analysis_schema = new mongoose.Schema({
   full_grain_count: { type: Number, required: true },
   broken_grain_count: { type: Number, required: true },
   broken_percentages: { type: mongoose.Schema.Types.Mixed },
+  black_dal: { type: Number, required: true },
   device_id: { type: String, required: true },
   timestamp: { type: String, required: true },
   created_at: { type: Date, default: Date.now }

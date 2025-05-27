@@ -128,6 +128,9 @@ export default function Details() {
                     <div>
                         <p><b>Total Objects:</b> {itemData.total_objects}</p>
                         <p><b>Full Grains:</b> {itemData.full_grain_count}</p>
+                        {type != "rice" && (
+                            <p><b>Black Dal:</b> {itemData?.black_dal}</p>
+                        )}
                         <p><b>Broken Grains:</b> {itemData.broken_grain_count}</p>
                         
                         {itemData.broken_percentages && (

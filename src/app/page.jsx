@@ -194,7 +194,7 @@ export default function Home() {
               />
             </div>
             
-            <div className="md:col-span-2 lg:col-span-1">
+            {/* <div className="md:col-span-2 lg:col-span-1">
               <button
                 onClick={generatePDF}
                 disabled={generating}
@@ -214,7 +214,7 @@ export default function Home() {
                   </>
                 )}
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
         
@@ -272,7 +272,6 @@ export default function Home() {
                           <tr className="border-b border-gray-200">
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">S. No</th>
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Date and Time</th>
-                            <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Device ID</th>
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                           </tr>
                         </thead>
@@ -281,7 +280,6 @@ export default function Home() {
                             <tr key={data._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                               <td className="py-4 px-4 text-sm text-gray-900">{idx + 1}</td>
                               <td className="py-4 px-4 text-sm text-gray-900">{formatDate(data.created_at)}</td>
-                              <td className="py-4 px-4 text-sm text-gray-900">{data.device_id}</td>
                               <td className="py-4 px-4">
                                 <Link 
                                   href={`/details?id=${data._id}&type=rice`} 
@@ -349,7 +347,6 @@ export default function Home() {
                           <tr className="border-b border-gray-200">
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">S. No</th>
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Date and Time</th>
-                            <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Device ID</th>
                             <th className="py-3 px-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                           </tr>
                         </thead>
@@ -358,7 +355,6 @@ export default function Home() {
                             <tr key={data._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                               <td className="py-4 px-4 text-sm text-gray-900">{idx + 1}</td>
                               <td className="py-4 px-4 text-sm text-gray-900">{formatDate(data.created_at)}</td>
-                              <td className="py-4 px-4 text-sm text-gray-900">{data.device_id}</td>
                               <td className="py-4 px-4">
                                 <Link 
                                   href={`/details?id=${data._id}&type=dal`} 
