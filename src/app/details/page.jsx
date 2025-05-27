@@ -28,7 +28,7 @@ export default function Details() {
                     throw new Error(`Failed to fetch ${type} data`);
                 }
                 const data = await response.json();
-                setItemData(data.data[0]);
+                setItemData(data.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
