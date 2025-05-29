@@ -17,31 +17,41 @@ export default function Home() {
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
+
+        // Build query params for rice and dal
+        let riceUrl = '/api/getricedata';
+        let dalUrl = '/api/getdaldata';
+        const params = [];
+        if (startDate) params.push(`startDate=${startDate}`);
+        if (endDate) params.push(`endDate=${endDate}`);
+        if (params.length) {
+          riceUrl += `?${params.join('&')}`;
+          dalUrl += `?${params.join('&')}`;
+        }
+
         // Fetch rice data
-        const riceResponse = await fetch('/api/getricedata');
+        const riceResponse = await fetch(riceUrl);
         if (!riceResponse.ok) {
           throw new Error('Failed to fetch rice data');
         }
         const riceData = await riceResponse.json();
-        // Sort rice data by created_at in descending order (newest first)
         const sortedRiceData = riceData.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
         setGrainData(sortedRiceData);
-        
+
         // Fetch dal data
-        const dalResponse = await fetch('/api/getdaldata');
+        const dalResponse = await fetch(dalUrl);
         if (!dalResponse.ok) {
           throw new Error('Failed to fetch dal data');
         }
         const dalData = await dalResponse.json();
-        
-        // Sort dal data by created_at in descending order (newest first)
         const sortedDalData = dalData.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
         setDalData(sortedDalData);
-        
+
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -50,7 +60,7 @@ export default function Home() {
     }
 
     fetchData();
-  }, []);
+  }, [startDate, endDate]); // Refetch when dates change
 
   const formatTimestamp = (timestamp) => {
     // Parse timestamp in format "20250516_150253_826037"
