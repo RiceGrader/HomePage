@@ -5,7 +5,9 @@ import RiceAnalysis from "@/models/RiceModel";
 export async function GET(request) {
     try{
         await connectToDatabase();
-        const data = await RiceAnalysis.find({}).sort({ created_at: -1 }); // Sort by newest first
+        // Remove any accidental limit, and log count for debugging
+        const data = await RiceAnalysis.find({}).sort({ created_at: -1 }); // No .limit()
+        console.log("RiceAnalysis count:", data.length); // Add this log
         return NextResponse.json({data: data}, { status: 200 });
     } catch (error) {
         console.error("Error fetching data:", error);
